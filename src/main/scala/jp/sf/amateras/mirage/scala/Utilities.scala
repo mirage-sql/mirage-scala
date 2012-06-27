@@ -4,6 +4,9 @@ import java.lang.reflect.Member
 import java.io.ByteArrayOutputStream
 import scala.tools.scalap.scalax.rules.scalasig.ScalaSigPrinter
 import java.io.PrintStream
+import jp.sf.amateras.mirage.parser.SqlParserImpl
+import jp.sf.amateras.mirage.util.MirageUtil
+import collection.JavaConversions._
 
 /**
  * Provides utility methods used by mirage-scala.
@@ -104,6 +107,22 @@ object Utilities {
       } else
         None //Pattern was not found anywhere in the signature
     }
+  }
+
+  /**
+   * Returns a tuple of the SQL statement and bind variable.
+   */
+  def parseSql[A](sql: SqlProvider, param: A) = {
+    val node = new SqlParserImpl(sql.getSql()).parse()
+    val context = MirageUtil.getSqlContext {
+      // Converts to java.util.Map if param is scala.Map
+      param match {
+        case map: Map[_, _] => (map:java.util.Map[_, _])
+        case params => params
+      }
+    }
+    node.accept(context)
+    (context.getSql, context.getBindVariables)
   }
 
 }

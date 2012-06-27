@@ -1,7 +1,6 @@
 package jp.sf.amateras.mirage.scala
 
 import collection.JavaConversions._
-import jp.sf.amateras.mirage.parser.{SqlContext, Node, SqlParserImpl}
 import jp.sf.amateras.mirage.{IterationCallback, SqlManagerImpl, SqlExecutor}
 
 /**
@@ -21,11 +20,9 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    */
   def getSingleResult[T](sql: SqlProvider, param: AnyRef = null)(implicit m: scala.reflect.Manifest[T]): Option[T] = {
     val clazz = m.erasure.asInstanceOf[Class[T]]
-    val node: Node = new SqlParserImpl(sql.getSql()).parse()
-    val context: SqlContext = prepareSqlContext(convertParam(param))
-    node.accept(context)
+    val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
-    Option(sqlExecutor.getSingleResult(clazz, context.getSql, context.getBindVariables))
+    Option(sqlExecutor.getSingleResult(clazz, prepareSql, bindVariables))
   }
 
   /**
@@ -38,26 +35,22 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    */
   def getResultList[T](sql: SqlProvider, param: AnyRef = null)(implicit m: scala.reflect.Manifest[T]): List[T] = {
     val clazz = m.erasure.asInstanceOf[Class[T]]
-    val node: Node = new SqlParserImpl(sql.getSql()).parse()
-    val context: SqlContext = prepareSqlContext(convertParam(param))
-    node.accept(context)
+    val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
     if(clazz == classOf[Map[String, _]]){
       // convert java.util.Map to scala.Map
-      sqlExecutor.getResultList(classOf[java.util.Map[String, _]], context.getSql,
-        context.getBindVariables).toList.map { entry => entry.toMap }.asInstanceOf[List[T]]
+      sqlExecutor.getResultList(classOf[java.util.Map[String, _]], prepareSql,
+        bindVariables).toList.map { entry => entry.toMap }.asInstanceOf[List[T]]
     } else {
-      sqlExecutor.getResultList(clazz, context.getSql, context.getBindVariables).toList
+      sqlExecutor.getResultList(clazz, prepareSql, bindVariables).toList
     }
   }
 
   def iterate[T, R](sql: SqlProvider, param: AnyRef = null)(callback: (T) => R)(implicit m: scala.reflect.Manifest[T]): R = {
     val clazz = m.erasure.asInstanceOf[Class[T]]
-    val node: Node = new SqlParserImpl(sql.getSql()).parse()
-    val context: SqlContext = prepareSqlContext(convertParam(param))
-    node.accept(context)
+    val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
-    sqlExecutor.iterate(clazz, new IterationCallbackAdapter(callback), context.getSql, context.getBindVariables)
+    sqlExecutor.iterate(clazz, new IterationCallbackAdapter(callback), prepareSql, bindVariables)
   }
 
   def iterate[T, R](sql: SqlProvider, context: R)(callback: (T, R) => R)(implicit m: scala.reflect.Manifest[T]): R = iterate(sql, null, context)(callback)(m)
@@ -78,11 +71,9 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    * @return updated row count
    */
   def executeUpdate(sql: SqlProvider, param: AnyRef = null): Int = {
-    val node: Node = new SqlParserImpl(sql.getSql()).parse()
-    val context: SqlContext = prepareSqlContext(convertParam(param))
-    node.accept(context)
+    val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
-    sqlExecutor.executeUpdateSql(context.getSql, context.getBindVariables, null)
+    sqlExecutor.executeUpdateSql(prepareSql, bindVariables, null)
   }
 
   /**
@@ -93,12 +84,10 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    * @return the row count of the executed SQL
    */
   def getCount(sql: SqlProvider, param: AnyRef = null): Int = {
-    val node: Node = new SqlParserImpl(sql.getSql()).parse()
-    val context: SqlContext = prepareSqlContext(convertParam(param))
-    node.accept(context)
+    val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
-    val countSql: String = sqlManager.getDialect.getCountSql(context.getSql);
-    sqlExecutor.getSingleResult(classOf[java.lang.Integer], countSql, context.getBindVariables).intValue
+    val countSql: String = sqlManager.getDialect.getCountSql(prepareSql);
+    sqlExecutor.getSingleResult(classOf[java.lang.Integer], countSql, bindVariables).intValue
   }
 
   /**
@@ -160,17 +149,6 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    * @return updated row count
    */
   def deleteBatch(entities: AnyRef*): Int = sqlManager.deleteBatch(entities: _*)
-
-  /**
-   * Converts to java.util.Map if param is scala.Map.
-   */
-  private def convertParam(param: AnyRef): AnyRef = param match {
-    case map: Map[_, _] => (map:java.util.Map[_, _])
-    case params => params
-  }
-
-  private def prepareSqlContext(param: AnyRef): SqlContext =
-    Utilities.invokeMethod(sqlManager, "prepareSqlContext", Array(classOf[Object]), Array(param))
 
   /**
    * Adapter for that callback function that would be given to iterate().
