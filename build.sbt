@@ -2,7 +2,7 @@ name := "mirage-scala"
 
 organization := "jp.sf.amateras.mirage"
 
-version := "0.0.4"
+version := "0.0.5-SNAPSHOT"
 
 //scalaVersion := "2.9.0"
 
