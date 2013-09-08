@@ -1,6 +1,6 @@
 package jp.sf.amateras.mirage.scala
 
-import org.specs.Specification
+import org.specs2.mutable._
 import jp.sf.amateras.mirage.scala._
 import jp.sf.amateras.mirage.annotation._
 import jp.sf.amateras.mirage.annotation.PrimaryKey.GenerationType._
@@ -8,46 +8,10 @@ import jp.sf.amateras.mirage.util.IOUtil
 import scala.annotation.target.field
 
 class SqlManagerTest extends Specification {
-
-  val SQL_PREFIX: String = "jp/sf/amateras/mirage/scala/";
-
-  val session: Session = Session.get
-  val sqlManager: SqlManager = session.sqlManager
-
-  def setup(){
-    session.begin()
-    executeMultipleStatement(SQL_PREFIX + "SqlManagerImplTest_setUp.sql")
-
-    sqlManager.executeUpdate(Sql("""
-    INSERT INTO BOOK (BOOK_ID, BOOK_NAME, AUTHOR, PRICE)
-    VALUES (1, 'Mirage in Action', 'Naoki Takezoe', 4800)
-    """))
-
-    val entity = Book(Auto, "現場で使えるJavaライブラリ", "Naoki Takezoe", Some(3600))
-    sqlManager.insertEntity(entity)
-  }
-
-  def tearDown(){
-    executeMultipleStatement(SQL_PREFIX + "SqlManagerImplTest_tearDown.sql")
-    session.rollback
-    session.release
-  }
-
-  def executeMultipleStatement(sqlPath: String) {
-    val cl: ClassLoader = Thread.currentThread().getContextClassLoader()
-    val bytes: Array[Byte] = IOUtil.readStream(cl.getResourceAsStream(sqlPath))
-    val sql: String = new String(bytes, "UTF-8")
-    for(statement: String <- sql.split(";")){
-      if(statement.trim().length() > 0){
-        sqlManager.executeUpdate(Sql(statement))
-      }
-    }
-  }
+  sequential
 
   "getResultList()" should {
-    setup.before
-    tearDown.after
-    "return correct results with JavaBean as a parameter" in {
+    "return correct results with JavaBean as a parameter" in new trees {
       val resultList = sqlManager.getResultList[Book](Sql("""
        SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE
        FROM BOOK
@@ -56,13 +20,13 @@ class SqlManagerTest extends Specification {
        /*END*/
       """), BookParam("Naoki Takezoe"))
 
-      resultList.size mustBe 2
+      resultList.size mustEqual 2
       resultList(0).bookName mustEqual "Mirage in Action"
       resultList(1).bookName mustEqual "現場で使えるJavaライブラリ"
       resultList.foreach({book => println(book.bookName + ", " + book.price)})
     }
 
-    "return correct results with Map as a parameter" in {
+    "return correct results with Map as a parameter" in new trees {
       val resultList = sqlManager.getResultList[Map[String, _]](Sql("""
        SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE
        FROM BOOK
@@ -71,26 +35,22 @@ class SqlManagerTest extends Specification {
        /*END*/
       """), Map("bookName" -> "Mirage in Action"))
 
-      resultList.size mustBe 1
+      resultList.size mustEqual 1
       resultList(0)("bookName").asInstanceOf[String] mustEqual "Mirage in Action"
       resultList.foreach({book => println(book("bookName") + ", " + book("price"))})
     }
   }
 
   "getCount()" should {
-    setup.before
-    tearDown.after
-    "return a correct count" in {
+    "return a correct count"  in new trees {
       val count = sqlManager.getCount(Sql("SELECT BOOK_ID FROM BOOK"))
-      count mustBe 2
+      count mustEqual 2
       println("count = " + count)
     }
   }
 
   "findEntity()" should {
-    setup.before
-    tearDown.after
-    "return an entity that has a given primary key" in {
+    "return an entity that has a given primary key" in new trees {
       val clazz = classOf[Book]
       val book = sqlManager.findEntity[Book](1)
       book.get.bookName mustEqual "Mirage in Action"
@@ -98,9 +58,7 @@ class SqlManagerTest extends Specification {
   }
 
   "iterate()" should {
-    setup.before
-    tearDown.after
-    "invokes the callback method for each row" in {
+    "invokes the callback method for each row" in new trees {
       val result = sqlManager.iterate[Book, Int](
         Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"), 0)
         { (book, sum) => sum + book.price.get }
@@ -110,9 +68,7 @@ class SqlManagerTest extends Specification {
   }
 
   "insertBatch()" should {
-    setup.before
-    tearDown.after
-    "insert given entities and return a inserted row count" in {
+    "insert given entities and return a inserted row count" in new trees {
       val result = sqlManager.insertBatch(
           Book(Auto, "Programming Scala", "Dean Wampler, Alex Payne", Some(3669)),
           Book(Auto, "Programming in Scala", "Martin Odersky, Lex Spoon, Bill Venners", Some(4482)))
@@ -133,6 +89,49 @@ class SqlManagerTest extends Specification {
 //      book2.get.price mustEqual 4482
     }
 
+  }
+
+  trait trees extends BeforeAfter {
+    
+    val SQL_PREFIX: String = "jp/sf/amateras/mirage/scala/";
+
+    val session: Session = Session.get
+    val sqlManager: SqlManager = session.sqlManager
+
+    private def executeMultipleStatement(sqlPath: String) {
+      val cl: ClassLoader = Thread.currentThread().getContextClassLoader()
+      val bytes: Array[Byte] = IOUtil.readStream(cl.getResourceAsStream(sqlPath))
+      val sql: String = new String(bytes, "UTF-8")
+      sql.split(";").foreach { statement =>
+        if(statement.trim().length() > 0){
+          try {
+            sqlManager.executeUpdate(Sql(statement))
+          } catch {
+            case e: Exception => e.printStackTrace()
+          }
+        }
+      }
+    }
+
+    
+    def before(){
+      session.begin()
+      executeMultipleStatement(SQL_PREFIX + "SqlManagerImplTest_setUp.sql")
+
+      sqlManager.executeUpdate(Sql("""
+      INSERT INTO BOOK (BOOK_ID, BOOK_NAME, AUTHOR, PRICE)
+      VALUES (1, 'Mirage in Action', 'Naoki Takezoe', 4800)
+      """))
+
+      val entity = Book(Auto, "現場で使えるJavaライブラリ", "Naoki Takezoe", Some(3600))
+      sqlManager.insertEntity(entity)
+    }
+
+    def after(){
+      executeMultipleStatement(SQL_PREFIX + "SqlManagerImplTest_tearDown.sql")
+      session.rollback
+      session.release
+    }
   }
 
 }
