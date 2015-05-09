@@ -34,7 +34,7 @@ case class Book(
 
 mirage-scala provides `SqlManager` that has a similar interface of Mirage. You can execute SQL using `SqlManager`.
 
-> Note: In mirage-scala, SqlManager#getSingleResult() returns Option[T].
+> Note: In mirage-scala, `SqlManager#getSingleResult()` returns `Option[T]`.
 
 ```scala
 import jp.sf.amateras.mirage.scala._
