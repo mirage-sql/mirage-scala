@@ -13,7 +13,6 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
   /**
    * Returns a single result.
    *
-   * @param clazz the type of result
    * @param sql the sql
    * @param param the parameter object
    * @return Some(result) or None
@@ -28,7 +27,6 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
   /**
    * Returns a list of results.
    *
-   * @param clazz the type of result
    * @param sql the sql
    * @param param the parameter object
    * @return Some(result) or None
@@ -93,7 +91,6 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
   /**
    * Finds the entity by the given primary key.
    *
-   * @param clazz the type of entity
    * @param id primary keys
    * @return the entity. If the entity which corresponds to the given primary key is not found, this method returns None.
    */
@@ -161,6 +158,7 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
 
 object SqlManager {
   BeanDescFactoryInitializer.initialize() //It is called only once.
+
   def apply(sqlManager: SqlManagerImpl): SqlManager = {
     sqlManager.setEntityOperator(new ScalaEntityOperator())
     new SqlManager(sqlManager)
