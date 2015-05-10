@@ -1,6 +1,6 @@
 name := "mirage-scala"
 organization := "jp.sf.amateras.mirage"
-version := "0.2.0"
+version := "0.1.0"
 scalaVersion := "2.11.6"
 
 resolvers += "amateras-release-repo" at "http://amateras.sourceforge.jp/mvn/"

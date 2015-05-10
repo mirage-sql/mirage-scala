@@ -14,7 +14,7 @@ To use mirage-scala with sbt based project, please add following dependency into
 ```scala
 resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
 
-libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0"
+libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.1.0"
 ```
 
 This is a simple example to query using mirage-scala:
