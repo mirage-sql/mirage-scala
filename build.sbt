@@ -1,23 +1,17 @@
 name := "mirage-scala"
-
 organization := "jp.sf.amateras.mirage"
-
-version := "0.1.0"
-
-scalaVersion := "2.10.1"
-
-//crossScalaVersions := Seq("2.8.1", "2.9.1", "2.9.1-1", "2.9.2")
+version := "0.2.0"
+scalaVersion := "2.11.6"
 
 resolvers += "amateras-release-repo" at "http://amateras.sourceforge.jp/mvn/"
-
 resolvers += "amateras-snapshot-repo" at "http://amateras.sourceforge.jp/mvn-snapshot/"
-
+resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
 resolvers += "Local Maven Repository" at "file:///"+Path.userHome.absolutePath+"/.m2/repository"
 
 libraryDependencies ++= Seq(
   "jp.sf.amateras.mirage" % "mirage" % "1.2.0" % "compile",
   "org.hsqldb" % "hsqldb" % "2.0.0" % "test",
-  "org.specs2" % "specs2_2.10" % "2.2" % "test",
+  "org.specs2" %% "specs2-core" % "3.6" % "test",
   "org.mockito" % "mockito-core" % "1.8.5" % "test"
 )
 

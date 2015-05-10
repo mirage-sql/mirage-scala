@@ -1,11 +1,8 @@
 package jp.sf.amateras.mirage.scala
 
 import org.specs2.mutable._
-import jp.sf.amateras.mirage.scala._
 import jp.sf.amateras.mirage.annotation._
-import jp.sf.amateras.mirage.annotation.PrimaryKey.GenerationType._
 import jp.sf.amateras.mirage.util.IOUtil
-import scala.annotation.target.field
 
 class SqlManagerTest extends Specification {
   sequential

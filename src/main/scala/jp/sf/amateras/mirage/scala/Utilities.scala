@@ -1,9 +1,7 @@
 package jp.sf.amateras.mirage.scala
-import scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser
-import java.lang.reflect.Member
-import java.io.ByteArrayOutputStream
-import scala.tools.scalap.scalax.rules.scalasig.ScalaSigPrinter
-import java.io.PrintStream
+
+import scala.tools.scalap.scalax.rules.scalasig._
+import java.lang.reflect.{Field, Member}
 import jp.sf.amateras.mirage.parser.SqlParserImpl
 import jp.sf.amateras.mirage.util.MirageUtil
 import collection.JavaConversions._
@@ -34,7 +32,7 @@ object Utilities {
     try {
       func
     } catch {
-      case ex: Exception => null
+      case ex: Exception => null.asInstanceOf[A1]
     }
   }
 
@@ -79,33 +77,19 @@ object Utilities {
 
   def getWrappedType[T](member: Member)(implicit m: Manifest[T]): Option[Class[_]] = {
     val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
+
     scalaSigOption flatMap { scalaSig =>
       val syms = scalaSig.topLevelClasses
-      // Print classes
-      val baos = new ByteArrayOutputStream
-      val stream = new PrintStream(baos)
-      val printer = new ScalaSigPrinter(stream, true)
-      for (c <- syms) {
-        if (c.path == member.getDeclaringClass().getName())
-          printer.printSymbol(c)
+      val _type = syms.collectFirst {
+        case c if (c.path == member.getDeclaringClass().getName) =>
+          member match {
+            case _: Field => findField(c, member.getName).map { f =>
+              findArgTypeForField(f, 0)
+            }
+            case _: Method => throw new RuntimeException("Method type is not supported in mirage-scala.")
+          }
       }
-      val fullSig = baos.toString
-      val clazz = m.erasure.asInstanceOf[Class[T]]
-      val matcher = """\s%s : %s\[scala\.(\w+)\]?""".format(member.getName, clazz.getName).r.pattern.matcher(fullSig)
-      if (matcher.find) {
-        matcher.group(1) match {
-          case "Int"     => Some(classOf[scala.Int])
-          case "Short"   => Some(classOf[scala.Short])
-          case "Long"    => Some(classOf[scala.Long])
-          case "Double"  => Some(classOf[scala.Double])
-          case "Float"   => Some(classOf[scala.Float])
-          case "Boolean" => Some(classOf[scala.Boolean])
-          case "Byte"    => Some(classOf[scala.Byte])
-          case "Char"    => Some(classOf[scala.Char])
-          case _ => None //Unknown scala primitive type?
-        }
-      } else
-        None //Pattern was not found anywhere in the signature
+      _type.flatten
     }
   }
 
@@ -123,6 +107,32 @@ object Utilities {
     }
     node.accept(context)
     (context.getSql, context.getBindVariables)
+  }
+
+  private def findField(c: ClassSymbol, name: String): Option[MethodSymbol] =
+    (c.children collect { case m: MethodSymbol if m.name == name => m }).headOption
+
+  private def findArgTypeForField(s: MethodSymbol, typeArgIdx: Int): Class[_] = {
+    val t = s.infoType match {
+      case NullaryMethodType(TypeRefType(_, _, args)) => args(typeArgIdx)
+    }
+
+    toClass(t match {
+      case TypeRefType(_, symbol, _)   => symbol
+      case x => throw new Exception("Unexpected type info " + x)
+    })
+  }
+
+  private def toClass(s: Symbol) = s.path match {
+    case "scala.Short"         => classOf[Short]
+    case "scala.Int"           => classOf[Int]
+    case "scala.Long"          => classOf[Long]
+    case "scala.Boolean"       => classOf[Boolean]
+    case "scala.Float"         => classOf[Float]
+    case "scala.Double"        => classOf[Double]
+    case "scala.Byte"          => classOf[Byte]
+    case "scala.Predef.String" => classOf[String]
+    case x                     => Class.forName(x)
   }
 
 }

@@ -14,27 +14,24 @@ To use mirage-scala with sbt based project, please add following dependency into
 ```scala
 resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
 
-libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.0.5" % "compile"
+libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0"
 ```
 
 This is a simple example to query using mirage-scala:
 
-At first, you can define the DTO which is mapped to ResultList as case class. You can specify `Option[T]` as property type for null-able properties. Note that annotations which annotated to properties need `@field` meta annotation.
+At first, you can define the DTO which is mapped to ResultList as case class. You can specify `Option[T]` as property type for null-able properties.
 
 ```scala
 // A class which mapped to ResultList
 case class Book(
-  @(PrimaryKey @field)(generationType = IDENTITY)
-  bookId: Pk[Int],
+  bookId: IdentityPk[Int],
   bookName: String,
   author: String,
   price: Option[Int]
 )
 ```
 
-mirage-scala provides `SqlManager` that has a similar interface of Mirage. You can execute SQL using `SqlManager`.
-
-> Note: In mirage-scala, `SqlManager#getSingleResult()` returns `Option[T]`.
+You can execute SQL using `SqlManager`.
 
 ```scala
 import jp.sf.amateras.mirage.scala._
@@ -61,7 +58,7 @@ Session.withTransaction { session =>
 }
 ```
 
-As different point of Mirage and mirage-scala, you can write [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) inline using `Sql()` in mirage-scala. Of course, you can use external SQL file in mirage-scala using `SqlFile()`:
+mirage-scala provides dynamic SQL template called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) in `Sql()`, or you can use external SQL file using `SqlFile()`:
 
 ```scala
 val result: List[Book] = sqlManager.getResultList[Book](
@@ -69,27 +66,15 @@ val result: List[Book] = sqlManager.getResultList[Book](
   Map("author"->"Naoki Takezoe"))
 ```
 
-In mirage-scala, you can use DTO or `Map[String, _]` as result class / parameter class. DTO must have var fields which correspond to select columns.
+In mirage-scala, you can use `Map[String, _]` as result class / parameter class.
 
 See also [Mirage documentation](http://amateras.sourceforge.jp/site/mirage/welcome.html) to learn about usage of Mirage.
 
 ## SQL less update
 
-mirage-scala also supports SQL less select / update using the entity class. The entity class has var fields which correspond to columns and annotations.
+mirage-scala also supports SQL less select / update using the entity class.
 
-```scala
-case class Book(
-  @PrimaryKey(generationType=GenerationType.IDENTITY)
-  bookId: Pk[Int],
-  bookName: String,
-  author: String,
-  price: Option[Int],
-)
-```
-
-You can select, insert, update and delete table rows using the entity.
-
-If the primary key is set at the server-side, for example, it's auto incremented, You have to specify Auto for the primary key property.
+If the primary key is set at the server-side, for example, it's auto incremented, You have to specify `Auto` for the primary key property.
 
 ```scala
 val book: Book = Book(
@@ -102,7 +87,7 @@ val book: Book = Book(
 sqlManager.insertEntity(book);
 ```
 
-If the primary key must be set by the application, you can use Id(value) to set the value to the primary key property.
+If the primary key must be set by the application, you can use `Id(value)` to set the value to the primary key property.
 
 ```scala
 val book: Book = Book(
@@ -131,13 +116,9 @@ sqlManager.deleteBatch(book1, book2, book3);
 sqlManager.deleteBatch(books: _*);
 ```
 
-As other way, you can generate Java source code of entities using [Ant Task](http://amateras.sourceforge.jp/site/mirage/apidocs/jp/sf/amateras/mirage/tool/EntityGenTask.html). Generated Java based entities are able to be used with mirage-scala.
-
 ## Iteration search
 
-To handle large data, Mirage provide iteration search.
-
-`SqlManager#iterate()` takes an IterateCallback object in Mirage. However in mirage-scala, it takes a callback function instead of an `IterateCallback` object.
+To handle large data, mirage-scala provides iteration search.
 
 ```scala
 var sum = 0
@@ -149,7 +130,7 @@ val result = sqlManager.iterate[Book, Int](
   }
 ```
 
-In this example, var variable `sum` is required to keep a total value outside of the callback function. You can remove it as following:
+In this example, var `sum` is required to keep a total value outside of the callback function. You can remove it as following:
 
 ```scala
 val result = sqlManager.iterate[Book, Int](
@@ -157,4 +138,4 @@ val result = sqlManager.iterate[Book, Int](
   { (book, sum) => sum + book.price }
 ```
 
-The callback function is given a resut of the previous callback invocation. And initial value is given at first. In this example, initial value is 0.
+The callback function is given a result of the previous callback invocation. And initial value is given at first. In this example, initial value is 0.
