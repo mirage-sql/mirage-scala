@@ -5,11 +5,11 @@ The SQL Centric Database Access Library for Scala
 
 ## What's mirage-scala?
 
-mirage-scala is Scala wrapper for [Mirage](https://github.com/takezoe/mirage). It provides the best interface to access to the database using Mirage for Scala.
+mirage-scala is Scala wrapper for [Mirage](https://github.com/takezoe/mirage).
 
-> Note: mirage-scala is still under preview release. Therefore main interface might be changed in the future release.
+It provides the dynamic SQL template language called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html). Directives is embedded as SQL comment, so the 2WaySQL template is also executable as raw SQL. It makes testability of SQL.
 
-To use mirage-scala with sbt based project, please add following dependency into your project definition.
+To use mirage-scala with sbt based project, please add following dependency into your `build.sbt`.
 
 ```scala
 resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
@@ -19,7 +19,7 @@ libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.1.0"
 
 This is a simple example to query using mirage-scala:
 
-At first, you can define the DTO which is mapped to ResultList as case class. You can specify `Option[T]` as property type for null-able properties.
+At first, define the DTO which is mapped to ResultList as case class. It's possible to specify `Option[T]` as property type for null-able properties.
 
 ```scala
 // A class which mapped to ResultList
@@ -31,7 +31,7 @@ case class Book(
 )
 ```
 
-You can execute SQL using `SqlManager`.
+Execute SQL using `SqlManager`. mirage-scala provides dynamic SQL template called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) in `Sql()`.
 
 ```scala
 import jp.sf.amateras.mirage.scala._
@@ -58,7 +58,7 @@ Session.withTransaction { session =>
 }
 ```
 
-mirage-scala provides dynamic SQL template called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) in `Sql()`, or you can use external SQL file using `SqlFile()`:
+You can also use the external SQL file using `SqlFile()`:
 
 ```scala
 val result: List[Book] = sqlManager.getResultList[Book](
@@ -66,7 +66,7 @@ val result: List[Book] = sqlManager.getResultList[Book](
   Map("author"->"Naoki Takezoe"))
 ```
 
-In mirage-scala, you can use `Map[String, _]` as result class / parameter class.
+In mirage-scala, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
 
 See also [Mirage documentation](http://amateras.sourceforge.jp/site/mirage/welcome.html) to learn about usage of Mirage.
 
