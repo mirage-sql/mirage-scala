@@ -3,7 +3,7 @@ mirage-scala
 
 The SQL Centric Database Access Library for Scala
 
-## What's mirage-scala?
+## Introduction
 
 mirage-scala is Scala wrapper for [Mirage](https://github.com/takezoe/mirage).
 
@@ -16,6 +16,8 @@ resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
 
 libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.1.0"
 ```
+
+## 2WaySQL dynamic template
 
 This is a simple example to query using mirage-scala:
 
