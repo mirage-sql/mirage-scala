@@ -1,7 +1,7 @@
 name := "mirage-scala"
 organization := "jp.sf.amateras.mirage"
-version := "0.1.0"
-scalaVersion := "2.11.6"
+version := "0.2.0-SNAPSHOT"
+scalaVersion := "2.12.1"
 
 resolvers += "amateras-release-repo" at "http://amateras.sourceforge.jp/mvn/"
 resolvers += "amateras-snapshot-repo" at "http://amateras.sourceforge.jp/mvn-snapshot/"
@@ -11,7 +11,7 @@ resolvers += "Local Maven Repository" at "file:///"+Path.userHome.absolutePath+"
 libraryDependencies ++= Seq(
   "jp.sf.amateras.mirage" % "mirage" % "1.2.0" % "compile",
   "org.hsqldb" % "hsqldb" % "2.0.0" % "test",
-  "org.specs2" %% "specs2-core" % "3.6" % "test",
+  "org.specs2" %% "specs2-core" % "3.8.9" % "test",
   "org.mockito" % "mockito-core" % "1.8.5" % "test"
 )
 
