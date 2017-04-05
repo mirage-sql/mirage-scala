@@ -1,10 +1,12 @@
 package jp.sf.amateras.mirage.scala
 
-import scala.tools.scalap.scalax.rules.scalasig._
 import java.lang.reflect.{Field, Member}
+
+import jp.sf.amateras.mirage.bean.BeanDescFactory
 import jp.sf.amateras.mirage.parser.SqlParserImpl
 import jp.sf.amateras.mirage.util.MirageUtil
-import collection.JavaConversions._
+import org.json4s.scalap.scalasig._
+import scala.collection.JavaConverters._
 
 /**
  * Provides utility methods used by mirage-scala.
@@ -15,12 +17,14 @@ object Utilities {
    * Runs the fiven function with the Closeable.
    * The Closeable is closed certainly after the execution of the function.
    */
-  def using[A, B <: {def close(): Unit}] (closeable: B) (f: B => A): A =
+  def using[A, B <: AutoCloseable] (closeable: B) (f: B => A): A =
     try {
       f(closeable)
     } finally {
       if(closeable != null){
-        withoutException { closeable.close() }
+        withoutException {
+          closeable.close()
+        }
       }
     }
 
@@ -32,7 +36,7 @@ object Utilities {
     try {
       func
     } catch {
-      case ex: Exception => null.asInstanceOf[A1]
+      case _: Exception => null.asInstanceOf[A1]
     }
   }
 
@@ -44,7 +48,7 @@ object Utilities {
     try {
       Some(func)
     } catch {
-      case ex: Exception => None
+      case _: Exception => None
     }
   }
 
@@ -64,15 +68,6 @@ object Utilities {
     val method = target.getClass().getDeclaredMethod(methodName, types:_*)
     method.setAccessible(true)
     method.invoke(target, params:_*).asInstanceOf[T]
-  }
-
-  def detectScalapOnClasspath(): Boolean = {
-    try {
-      Class.forName("scala.tools.scalap.scalax.rules.scalasig.ByteCode")
-      true
-    } catch {
-      case cnfe : ClassNotFoundException => false
-    }
   }
 
   def getWrappedType[T](member: Member)(implicit m: Manifest[T]): Option[Class[_]] = {
@@ -97,14 +92,17 @@ object Utilities {
    * Returns a tuple of the SQL statement and bind variable.
    */
   def parseSql[A](sql: SqlProvider, param: A) = {
-    val node = new SqlParserImpl(sql.getSql()).parse()
-    val context = MirageUtil.getSqlContext {
+    val beanDescFactory = new BeanDescFactory()
+    beanDescFactory.setPropertyExtractor(new ScalaPropertyExtractor)
+
+    val node = new SqlParserImpl(sql.getSql(), beanDescFactory).parse()
+    val context = MirageUtil.getSqlContext(beanDescFactory,
       // Converts to java.util.Map if param is scala.Map
       param match {
-        case map: Map[_, _] => (map:java.util.Map[_, _])
+        case map: Map[_, _] => map.asJava
         case params => params
       }
-    }
+    )
     node.accept(context)
     (context.getSql, context.getBindVariables)
   }
@@ -118,7 +116,7 @@ object Utilities {
     }
 
     toClass(t match {
-      case TypeRefType(_, symbol, _)   => symbol
+      case TypeRefType(_, symbol, _) => symbol
       case x => throw new Exception("Unexpected type info " + x)
     })
   }

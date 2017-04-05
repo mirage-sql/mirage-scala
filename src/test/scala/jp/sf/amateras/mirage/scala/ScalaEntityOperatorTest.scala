@@ -9,12 +9,13 @@ class ScalaEntityOperatorTest extends Specification {
   val nameConverter = new DefaultNameConverter
   val entityOperator = new ScalaEntityOperator
 
-  BeanDescFactoryInitializer.initialize
+  val beanDescFactory = new BeanDescFactory()
+  beanDescFactory.setPropertyExtractor(new ScalaPropertyExtractor)
 
   "getPrimaryKeyInfo()" should {
     "return GenerationType.APPLICATION for Pk" in {
       val clazz = classOf[TestEntity1]
-      val beanDesc = BeanDescFactory.getBeanDesc(clazz)
+      val beanDesc = beanDescFactory.getBeanDesc(clazz)
       val primaryKeyInfo = entityOperator.getPrimaryKeyInfo(clazz, beanDesc.getPropertyDesc(0), nameConverter)
 
       primaryKeyInfo.generationType must be_==(GenerationType.APPLICATION)
@@ -22,7 +23,7 @@ class ScalaEntityOperatorTest extends Specification {
     }
     "return GenerationType.IDENTITY for IdentityPk" in {
       val clazz = classOf[TestEntity2]
-      val beanDesc = BeanDescFactory.getBeanDesc(clazz)
+      val beanDesc = beanDescFactory.getBeanDesc(clazz)
       val primaryKeyInfo = entityOperator.getPrimaryKeyInfo(clazz, beanDesc.getPropertyDesc(0), nameConverter)
 
       primaryKeyInfo.generationType must be_==(GenerationType.IDENTITY)
@@ -30,7 +31,7 @@ class ScalaEntityOperatorTest extends Specification {
     }
     "return GenerationType.SEQUENCE for SequencePk" in {
       val clazz = classOf[TestEntity3]
-      val beanDesc = BeanDescFactory.getBeanDesc(clazz)
+      val beanDesc = beanDescFactory.getBeanDesc(clazz)
       val primaryKeyInfo = entityOperator.getPrimaryKeyInfo(clazz, beanDesc.getPropertyDesc(0), nameConverter)
 
       primaryKeyInfo.generationType must be_==(GenerationType.SEQUENCE)
@@ -38,7 +39,7 @@ class ScalaEntityOperatorTest extends Specification {
     }
     "return null for the property which is not the primary key" in {
       val clazz = classOf[TestEntity1]
-      val beanDesc = BeanDescFactory.getBeanDesc(clazz)
+      val beanDesc = beanDescFactory.getBeanDesc(clazz)
       val primaryKeyInfo = entityOperator.getPrimaryKeyInfo(clazz, beanDesc.getPropertyDesc(1), nameConverter)
 
       primaryKeyInfo must beNull

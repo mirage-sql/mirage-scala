@@ -1,7 +1,6 @@
 package jp.sf.amateras.mirage.scala
+
 import jp.sf.amateras.mirage.bean.PropertyWrapperImpl
-import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigParser, ScalaSigPrinter}
-import java.io._
 import java.lang.reflect._
 
 /**
@@ -26,13 +25,7 @@ class OptionFieldPropertyWrapper(name: String, field: Field) extends PropertyWra
   }
 
   override def getType(): Class[_] = {
-    val clazz = super.getType
-
-    val optionType =
-      if (Utilities.detectScalapOnClasspath()) Utilities.getWrappedType[Option[_]](getField)
-      else throw new RuntimeException("scalap not found on classpath.")
-
-    optionType match {
+    Utilities.getWrappedType[Option[_]](getField) match {
       case Some(x) => x
       case None => throw new RuntimeException("Failed to retreive Option type.")
     }

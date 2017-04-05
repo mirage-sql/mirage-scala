@@ -1,7 +1,9 @@
 package jp.sf.amateras.mirage.scala
 
-import collection.JavaConversions._
-import jp.sf.amateras.mirage.{IterationCallback, SqlManagerImpl, SqlExecutor}
+import jp.sf.amateras.mirage.bean.BeanDescFactory
+
+import collection.JavaConverters._
+import jp.sf.amateras.mirage.{IterationCallback, SqlExecutor, SqlManagerImpl}
 
 /**
  * SqlManager wrapper for Scala.
@@ -9,6 +11,9 @@ import jp.sf.amateras.mirage.{IterationCallback, SqlManagerImpl, SqlExecutor}
 class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
 
   private lazy val sqlExecutor: SqlExecutor = Utilities.getField(sqlManager, "sqlExecutor")
+  val beanDescFactory = new BeanDescFactory()
+  beanDescFactory.setPropertyExtractor(new ScalaPropertyExtractor)
+  sqlManager.setBeanDescFactory(beanDescFactory)
 
   /**
    * Returns a single result.
@@ -18,7 +23,7 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    * @return Some(result) or None
    */
   def getSingleResult[T](sql: SqlProvider, param: AnyRef = null)(implicit m: scala.reflect.Manifest[T]): Option[T] = {
-    val clazz = m.erasure.asInstanceOf[Class[T]]
+    val clazz = m.runtimeClass.asInstanceOf[Class[T]]
     val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
     Option(sqlExecutor.getSingleResult(clazz, prepareSql, bindVariables))
@@ -32,20 +37,20 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    * @return Some(result) or None
    */
   def getResultList[T](sql: SqlProvider, param: AnyRef = null)(implicit m: scala.reflect.Manifest[T]): List[T] = {
-    val clazz = m.erasure.asInstanceOf[Class[T]]
+    val clazz = m.runtimeClass.asInstanceOf[Class[T]]
     val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
     if(clazz == classOf[Map[String, _]]){
       // convert java.util.Map to scala.Map
       sqlExecutor.getResultList(classOf[java.util.Map[String, _]], prepareSql,
-        bindVariables).toList.map { entry => entry.toMap }.asInstanceOf[List[T]]
+        bindVariables).asScala.map(_.asScala.toMap).toList.asInstanceOf[List[T]]
     } else {
-      sqlExecutor.getResultList(clazz, prepareSql, bindVariables).toList
+      sqlExecutor.getResultList(clazz, prepareSql, bindVariables).asScala.toList
     }
   }
 
   def iterate[T, R](sql: SqlProvider, param: AnyRef = null)(callback: (T) => R)(implicit m: scala.reflect.Manifest[T]): R = {
-    val clazz = m.erasure.asInstanceOf[Class[T]]
+    val clazz = m.runtimeClass.asInstanceOf[Class[T]]
     val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
 
     sqlExecutor.iterate(clazz, new IterationCallbackAdapter(callback), prepareSql, bindVariables)
@@ -95,7 +100,7 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
    * @return the entity. If the entity which corresponds to the given primary key is not found, this method returns None.
    */
   def findEntity[T](id: Any*)(implicit m: scala.reflect.Manifest[T]): Option[T] = {
-    val clazz = m.erasure.asInstanceOf[Class[T]]
+    val clazz = m.runtimeClass.asInstanceOf[Class[T]]
     Option(sqlManager.findEntity(clazz, id.map {_.asInstanceOf[AnyRef]}: _*))
   }
 
@@ -157,8 +162,6 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
 }
 
 object SqlManager {
-  BeanDescFactoryInitializer.initialize() //It is called only once.
-
   def apply(sqlManager: SqlManagerImpl): SqlManager = {
     sqlManager.setEntityOperator(new ScalaEntityOperator())
     new SqlManager(sqlManager)
