@@ -24,3 +24,25 @@ publishTo := {
   else
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
+
+pomExtra := (
+  <url>https://github.com/takezoe/mirage-scala</url>
+    <licenses>
+      <license>
+        <name>The Apache Software License, Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      </license>
+    </licenses>
+    <scm>
+      <url>https://github.com/takezoe/mirage-scala</url>
+      <connection>scm:git:https://github.com/takezoe/mirage-scala.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>takezoe</id>
+        <name>Naoki Takezoe</name>
+        <email>takezoe_at_gmail.com</email>
+        <timezone>+9</timezone>
+      </developer>
+    </developers>
+  )
