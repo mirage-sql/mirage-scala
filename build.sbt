@@ -4,7 +4,7 @@ version := "0.2.0-SNAPSHOT"
 scalaVersion := "2.12.1"
 
 libraryDependencies ++= Seq(
-  "jp.sf.amateras" % "mirage" % "1.2.4" % "compile",
+  "jp.sf.amateras" % "mirage" % "1.2.5" % "compile",
   "org.json4s" %% "json4s-scalap" % "3.5.0",
   "org.hsqldb" % "hsqldb" % "2.0.0" % "test",
   "org.specs2" %% "specs2-core" % "3.8.9" % "test",
