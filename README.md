@@ -12,8 +12,6 @@ It provides the dynamic SQL template language called [2waySQL](http://amateras.s
 To use mirage-scala with sbt based project, please add following dependency into your `build.sbt`.
 
 ```scala
-resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
-
 libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0"
 ```
 
