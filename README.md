@@ -120,23 +120,23 @@ sqlManager.deleteBatch(books: _*);
 
 ## ResultSet stream
 
-To handle large data, mirage-scala is providing `foreach()` method.
+To handle large data, create stream by `stream()` method and process each records by `foreach()` method.
 
 ```scala
-sqlManager.foreach[Book, Int](
-  Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK")
-){ book =>
-  println(book)
-}
+sqlManager
+  .stream(Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"))
+  .foreach[Book] { book =>
+    println(book)
+  }
 ```
 
 If you would like to aggregate streaming values, you can use `foldLeft` method instead:
 
 ```scala
-val sum = sqlManager.foldLeft[Book, Int](
-  Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK")
-)(0){ case (book, i) =>
-  i + book.price
-}
+val sum = sqlManager
+  .stream(Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"))
+  .foldLeft[Book, Int](0){ case (book, i) =>
+    i + book.price
+  }
 ```
 

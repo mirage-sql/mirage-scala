@@ -56,9 +56,9 @@ class SqlManagerTest extends Specification {
 
   "iterate()" should {
     "invokes the callback method for each row" in new trees {
-      val result = sqlManager.iterate[Book, Int](
-        Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"), 0)
-        { (book, sum) => sum + book.price.get }
+      val result = sqlManager
+        .stream(Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"))
+        .foldLeft[Book, Int](0) { case (book, sum) => sum + book.price.get }
 
       result mustEqual 8400
     }
