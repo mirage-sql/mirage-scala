@@ -14,7 +14,7 @@ To use mirage-scala with sbt based project, please add following dependency into
 ```scala
 resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
 
-libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.1.0"
+libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0-SNAPSHOT"
 ```
 
 ## 2WaySQL dynamic template
@@ -118,26 +118,25 @@ sqlManager.deleteBatch(book1, book2, book3);
 sqlManager.deleteBatch(books: _*);
 ```
 
-## Iteration search
+## ResultSet stream
 
-To handle large data, mirage-scala provides iteration search.
-
-```scala
-var sum = 0
-val result = sqlManager.iterate[Book, Int](
-  Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"))
-  { book =>
-      sum = sum + book.price
-      sum
-  }
-```
-
-In this example, var `sum` is required to keep a total value outside of the callback function. You can remove it as following:
+To handle large data, mirage-scala is providing `foreach()` method.
 
 ```scala
-val result = sqlManager.iterate[Book, Int](
-  Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK"), 0)
-  { (book, sum) => sum + book.price }
+sqlManager.foreach[Book, Int](
+  Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK")
+){ book =>
+  println(book)
+}
 ```
 
-The callback function is given a result of the previous callback invocation. And initial value is given at first. In this example, initial value is 0.
+If you would like to aggregate streaming values, you can use `foldLeft` method instead:
+
+```scala
+val sum = sqlManager.foldLeft[Book, Int](
+  Sql("SELECT BOOK_ID, BOOK_NAME, AUTHOR, PRICE FROM BOOK")
+)(0){ case (book, i) =>
+  i + book.price
+}
+```
+

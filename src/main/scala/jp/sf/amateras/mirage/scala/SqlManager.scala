@@ -49,6 +49,7 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
     }
   }
 
+  @deprecated("Use foreach or foldLeft instead", "0.2.0")
   def iterate[T, R](sql: SqlProvider, param: AnyRef = null)(callback: (T) => R)(implicit m: scala.reflect.Manifest[T]): R = {
     val clazz = m.runtimeClass.asInstanceOf[Class[T]]
     val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
@@ -56,8 +57,10 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
     sqlExecutor.iterate(clazz, new IterationCallbackAdapter(callback), prepareSql, bindVariables)
   }
 
+  @deprecated("Use foreach or foldLeft instead", "0.2.0")
   def iterate[T, R](sql: SqlProvider, context: R)(callback: (T, R) => R)(implicit m: scala.reflect.Manifest[T]): R = iterate(sql, null, context)(callback)(m)
 
+  @deprecated("Use foreach or foldLeft instead", "0.2.0")
   def iterate[T, R](sql: SqlProvider, param: AnyRef, context: R)(callback: (T, R) => R)(implicit m: scala.reflect.Manifest[T]): R = {
     var result = context
     iterate(sql, param){ t: T =>
@@ -65,6 +68,22 @@ class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
       result
     }(m)
   }
+
+  def foreach[T](sql: SqlProvider, param: AnyRef = null)(callback: (T) => Unit)(implicit m: scala.reflect.Manifest[T]): Unit = {
+    val clazz = m.runtimeClass.asInstanceOf[Class[T]]
+    val (prepareSql, bindVariables) = Utilities.parseSql(sql, param)
+
+    sqlExecutor.iterate(clazz, new IterationCallbackAdapter(callback), prepareSql, bindVariables)
+  }
+
+  def foldLeft[T, R](sql: SqlProvider, param: AnyRef = null)(context: R)(callback: (T, R) => R)(implicit m: scala.reflect.Manifest[T]): R = {
+    var result = context
+    foreach(sql, param){ t: T =>
+      result = callback(t, result)
+    }(m)
+    result
+  }
+
 
   /**
    * Executes the updating SQL.
