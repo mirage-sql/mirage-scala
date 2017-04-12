@@ -1,4 +1,4 @@
-mirage-scala
+mirage-scala [![Build Status](https://travis-ci.org/takezoe/mirage-scala.svg?branch=master)](https://travis-ci.org/takezoe/mirage-scala)
 ============
 
 The SQL Centric Database Access Library for Scala
