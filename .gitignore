@@ -9,3 +9,8 @@ src_managed/
 project/boot/
 project/plugins/project/
 
+# IDE specific
+*.iml
+*.ipr
+*.iws
+.idea/
