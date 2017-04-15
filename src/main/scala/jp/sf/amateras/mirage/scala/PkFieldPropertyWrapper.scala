@@ -27,7 +27,7 @@ class PkFieldPropertyWrapper(name: String, field: Field) extends PropertyWrapper
   override def getType(): Class[_] = {
     Utilities.getWrappedType[Pk[_]](getField) match {
       case Some(x) => x
-      case None => throw new RuntimeException("Failed to retreive Pk type.")
+      case None => throw new RuntimeException("Failed to retrieve Pk type.")
     }
   }
 

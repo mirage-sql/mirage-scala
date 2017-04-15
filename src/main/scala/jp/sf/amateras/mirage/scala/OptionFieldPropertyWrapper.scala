@@ -27,7 +27,7 @@ class OptionFieldPropertyWrapper(name: String, field: Field) extends PropertyWra
   override def getType(): Class[_] = {
     Utilities.getWrappedType[Option[_]](getField) match {
       case Some(x) => x
-      case None => throw new RuntimeException("Failed to retreive Option type.")
+      case None => throw new RuntimeException("Failed to retrieve Option type.")
     }
   }
 

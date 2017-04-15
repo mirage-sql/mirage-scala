@@ -2,7 +2,7 @@ package jp.sf.amateras.mirage.scala
 
 /**
  * Session wrapper for Scala.
- * You can control transactiin and get [[jp.sf.amateras.mirage.scala.SqlManager]] through this.
+ * You can control transaction and get [[jp.sf.amateras.mirage.scala.SqlManager]] through this.
  *
  * @constructor Creates new instance of Session
  * @param session Raw Session of Mirage
