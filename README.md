@@ -31,7 +31,7 @@ case class Book(
 )
 ```
 
-Execute SQL using `SqlManager`. ```mirage-scala``` provides dynamic SQL template called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) in `Sql()`.
+Execute SQL using `SqlManager`. ```mirage-scala``` provides dynamic SQL template called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL) in `Sql()`.
 
 ```scala
 import jp.sf.amateras.mirage.scala._
