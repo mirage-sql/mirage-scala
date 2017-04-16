@@ -5,11 +5,11 @@ The SQL Centric Database Access Library for Scala
 
 ## Introduction
 
-mirage-scala is Scala wrapper for [Mirage](https://github.com/takezoe/mirage).
+Mirage-scala is Scala wrapper for [Mirage SQL](https://github.com/mirage-sql/mirage/).
 
-It provides the dynamic SQL template language called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html). Directives is embedded as SQL comment, so the 2WaySQL template is also executable as raw SQL. It makes testability of SQL.
+It provides the dynamic SQL template language called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL). Directives are embedded as SQL comments, so the 2WaySQL template is also executable as raw SQL. It makes SQL dynamic and testable.
 
-To use mirage-scala with sbt based project, please add following dependency into your `build.sbt`.
+To use mirage-scala with an sbt based project, add following dependency to your `build.sbt`.
 
 ```scala
 libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0"
@@ -17,7 +17,7 @@ libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0"
 
 ## 2WaySQL dynamic template
 
-This is a simple example to query using mirage-scala:
+This is a simple example to query using ```mirage-scala```:
 
 At first, define the DTO which is mapped to ResultList as case class. It's possible to specify `Option[T]` as property type for null-able properties.
 
@@ -31,7 +31,7 @@ case class Book(
 )
 ```
 
-Execute SQL using `SqlManager`. mirage-scala provides dynamic SQL template called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) in `Sql()`.
+Execute SQL using `SqlManager`. ```mirage-scala``` provides dynamic SQL template called [2waySQL](http://amateras.sourceforge.jp/site/mirage/2waysql.html) in `Sql()`.
 
 ```scala
 import jp.sf.amateras.mirage.scala._
@@ -66,13 +66,13 @@ val result: List[Book] = sqlManager.getResultList[Book](
   Map("author"->"Naoki Takezoe"))
 ```
 
-In mirage-scala, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
+In ```mirage-scala```, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
 
-See also [Mirage documentation](http://amateras.sourceforge.jp/site/mirage/welcome.html) to learn about usage of Mirage.
+See also the [Mirage SQL Documentation](https://github.com/mirage-sql/mirage/wiki/Introduction) to learn more about it's usage.
 
 ## SQL less update
 
-mirage-scala also supports SQL less select / update using the entity class.
+```mirage-scala``` also supports SQL less select / update using the entity class.
 
 If the primary key is set at the server-side, for example, it's auto incremented, You have to specify `Auto` for the primary key property.
 
@@ -100,7 +100,7 @@ val book: Book = Book(
 sqlManager.insertEntity(book);
 ```
 
-Also batch updating is available.
+Batch updating is also available.
 
 ```scala
 // batch inserting

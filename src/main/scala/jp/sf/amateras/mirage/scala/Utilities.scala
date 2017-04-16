@@ -30,7 +30,7 @@ object Utilities {
 
   /**
    * Runs the given function without any exceptions and returns the return value of the function.
-   * If any exceptions are occured, this method returns null.
+   * If any exceptions are occurred, this method returns null.
    */
   def withoutExceptionOrNull[A, A1 >: A](func: => A)(implicit ev: Null <:< A1): A1 = {
     try {
@@ -42,7 +42,7 @@ object Utilities {
 
   /**
    * Runs the given function without any exceptions and returns the return value of the function as Some(value).
-   * If any exceptions are occured, this method returns None.
+   * If any exceptions are occurred, this method returns None.
    */
   def withoutException[T](func: => T): Option[T] = {
     try {
