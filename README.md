@@ -1,4 +1,4 @@
-mirage-scala [![Build Status](https://travis-ci.org/mirage-sql/mirage-scala.svg?branch=master)](https://travis-ci.org/mirage-sql/mirage-scala)
+mirage-scala [![Build Status](https://travis-ci.org/mirage-sql/mirage-scala.svg?branch=master)](https://travis-ci.org/mirage-sql/mirage-scala) [![Join the chat at https://gitter.im/mirage-sql/mirage-sql](https://badges.gitter.im/mirage-sql/mirage-sql.svg)](https://gitter.im/mirage-sql/mirage-sql?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ============
 
 The SQL Centric Database Access Library for Scala
