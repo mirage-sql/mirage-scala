@@ -5,10 +5,10 @@ scalaVersion := "2.12.2"
 
 libraryDependencies ++= Seq(
   "jp.sf.amateras" % "mirage" % "1.2.5" % "compile",
-  "org.json4s" %% "json4s-scalap" % "3.5.0",
-  "org.hsqldb" % "hsqldb" % "2.0.0" % "test",
+  "org.json4s" %% "json4s-scalap" % "3.5.1",
+  "org.hsqldb" % "hsqldb" % "2.4.0" % "test",
   "org.specs2" %% "specs2-core" % "3.8.9" % "test",
-  "org.mockito" % "mockito-core" % "1.8.5" % "test"
+  "org.mockito" % "mockito-core" % "2.7.22" % "test"
 )
 
 scalacOptions := Seq("-deprecation", "-feature")
