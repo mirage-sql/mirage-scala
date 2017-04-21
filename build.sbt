@@ -1,6 +1,6 @@
-name := "mirage-scala"
-organization := "jp.sf.amateras.mirage"
-version := "0.2.0"
+name := "miragesql-scala"
+organization := "com.miragesql"
+version := "0.3.0"
 scalaVersion := "2.12.1"
 
 libraryDependencies ++= Seq(
@@ -26,7 +26,7 @@ publishTo := {
 }
 
 pomExtra := (
-  <url>https://github.com/takezoe/mirage-scala</url>
+  <url>https://github.com/mirage-sql/mirage-scala</url>
     <licenses>
       <license>
         <name>The Apache Software License, Version 2.0</name>
@@ -34,8 +34,8 @@ pomExtra := (
       </license>
     </licenses>
     <scm>
-      <url>https://github.com/takezoe/mirage-scala</url>
-      <connection>scm:git:https://github.com/takezoe/mirage-scala.git</connection>
+      <url>https://github.com/mirage-sql/mirage-scala</url>
+      <connection>scm:git:https://github.com/mirage-sql/mirage-scala.git</connection>
     </scm>
     <developers>
       <developer>
