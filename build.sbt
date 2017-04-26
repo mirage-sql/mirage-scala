@@ -4,7 +4,7 @@ version := "0.3.0"
 scalaVersion := "2.12.2"
 
 libraryDependencies ++= Seq(
-  "jp.sf.amateras" % "mirage" % "1.2.5" % "compile",
+  "com.miragesql" % "miragesql" % "1.3.0" % "compile",
   "org.json4s" %% "json4s-scalap" % "3.5.1",
   "org.hsqldb" % "hsqldb" % "2.4.0" % "test",
   "org.specs2" %% "specs2-core" % "3.8.9" % "test",
