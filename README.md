@@ -12,12 +12,12 @@ It provides the dynamic SQL template language called [2waySQL](https://github.co
 To use mirage-scala with an sbt based project, add following dependency to your `build.sbt`.
 
 ```scala
-libraryDependencies += "jp.sf.amateras.mirage" %% "mirage-scala" % "0.2.0"
+libraryDependencies += "com.miragesql" %% "miragesql-scala" % "1.3.0"
 ```
 
 ## 2WaySQL dynamic template
 
-This is a simple example to query using ```mirage-scala```:
+This is a simple example to query using mirage-scala:
 
 At first, define the DTO which is mapped to ResultList as case class. It's possible to specify `Option[T]` as property type for null-able properties.
 
@@ -31,7 +31,7 @@ case class Book(
 )
 ```
 
-Execute SQL using `SqlManager`. ```mirage-scala``` provides dynamic SQL template called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL) in `Sql()`.
+Execute SQL using `SqlManager`. mirage-scala provides dynamic SQL template called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL) in `Sql()`.
 
 ```scala
 import jp.sf.amateras.mirage.scala._
@@ -66,13 +66,13 @@ val result: List[Book] = sqlManager.getResultList[Book](
   Map("author"->"Naoki Takezoe"))
 ```
 
-In ```mirage-scala```, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
+In mirage-scala, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
 
 See also the [Mirage SQL Documentation](https://github.com/mirage-sql/mirage/wiki/Introduction) to learn more about it's usage.
 
 ## SQL less update
 
-```mirage-scala``` also supports SQL less select / update using the entity class.
+mirage-scala also supports SQL less select / update using the entity class.
 
 If the primary key is set at the server-side, for example, it's auto incremented, You have to specify `Auto` for the primary key property.
 
@@ -137,4 +137,3 @@ val sum = sqlManager
     i + book.price
   }
 ```
-
