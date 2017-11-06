@@ -1,7 +1,7 @@
 name := "miragesql-scala"
 organization := "com.miragesql"
 version := "1.3.0"
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
   "com.miragesql" % "miragesql" % "1.3.0" % "compile",
