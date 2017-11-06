@@ -1,9 +1,9 @@
-package jp.sf.amateras.mirage.scala
+package com.miragesql.miragesql.scala
 
 import com.miragesql.miragesql.bean.DefaultPropertyExtractor
 import com.miragesql.miragesql.bean.PropertyWrapper
 import com.miragesql.miragesql.bean.PropertyExtractor.PropertyInfo
-import jp.sf.amateras.mirage.scala.Utilities._
+import com.miragesql.miragesql.scala.Utilities._
 import com.miragesql.miragesql.bean.PropertyWrapperImpl
 import java.lang.reflect.Modifier
 import java.lang.reflect.Field
