@@ -1,8 +1,8 @@
-package jp.sf.amateras.mirage.scala
+package com.miragesql.miragesql.scala
 
 /**
  * Session wrapper for Scala.
- * You can control transaction and get [[jp.sf.amateras.mirage.scala.SqlManager]] through this.
+ * You can control transaction and get [[com.miragesql.miragesql.scala.SqlManager]] through this.
  *
  * @constructor Creates new instance of Session
  * @param session Raw Session of Mirage
@@ -78,7 +78,7 @@ class Session(session: com.miragesql.miragesql.session.Session){
  * }
  * }}}
  *
- * == Automiatic Transaction Controllong ==
+ * == Automatic Transaction Controlling ==
  *
  * You can use Session with automatic transaction controlling using Session#withTransaction.
  *

@@ -1,6 +1,6 @@
-package jp.sf.amateras.mirage.scala
+package com.miragesql.miragesql.scala
 
-import jp.sf.amateras.mirage.scala.Utilities._
+import com.miragesql.miragesql.scala.Utilities._
 import com.miragesql.miragesql.util.IOUtil
 
 /**

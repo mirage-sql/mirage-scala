@@ -1,4 +1,4 @@
-package jp.sf.amateras.mirage.scala
+package com.miragesql.miragesql.scala
 
 import com.miragesql.miragesql.DefaultEntityOperator
 import com.miragesql.miragesql.EntityOperator.PrimaryKeyInfo

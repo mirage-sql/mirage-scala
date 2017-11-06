@@ -1,4 +1,4 @@
-package jp.sf.amateras.mirage.scala
+package com.miragesql.miragesql.scala
 
 import org.specs2.mutable._
 import com.miragesql.miragesql.annotation._
@@ -89,8 +89,7 @@ class SqlManagerTest extends Specification {
   }
 
   trait trees extends BeforeAfter {
-    
-    val SQL_PREFIX: String = "jp/sf/amateras/mirage/scala/";
+    val SQL_PREFIX: String = "com/miragesql/miragesql/scala/";
 
     val session: Session = Session.get
     val sqlManager: SqlManager = session.sqlManager

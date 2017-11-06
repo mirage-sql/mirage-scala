@@ -12,7 +12,7 @@ It provides the dynamic SQL template language called [2waySQL](https://github.co
 To use mirage-scala with an sbt based project, add following dependency to your `build.sbt`.
 
 ```scala
-libraryDependencies += "com.miragesql" %% "miragesql-scala" % "1.3.0"
+libraryDependencies += "com.miragesql" %% "miragesql-scala" % "2.0.0"
 ```
 
 ## 2WaySQL dynamic template
@@ -34,7 +34,7 @@ case class Book(
 Execute SQL using `SqlManager`. mirage-scala provides dynamic SQL template called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL) in `Sql()`.
 
 ```scala
-import jp.sf.amateras.mirage.scala._
+import com.miragesql.miragesql.scala._
 
 Session.withTransaction { session =>
   val sqlManager: SqlManager = session.sqlManager

@@ -1,4 +1,5 @@
-package jp.sf.amateras.mirage.scala
+package com.miragesql.miragesql.scala
+
 import org.specs2.mutable._
 import com.miragesql.miragesql.bean.BeanDescFactory
 import com.miragesql.miragesql.annotation.PrimaryKey.GenerationType
