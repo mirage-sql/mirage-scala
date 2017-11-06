@@ -1,7 +1,7 @@
 package jp.sf.amateras.mirage.scala
 
 import jp.sf.amateras.mirage.scala.Utilities._
-import jp.sf.amateras.mirage.util.IOUtil
+import com.miragesql.miragesql.util.IOUtil
 
 /**
  * Provides an interface to give 2waySQL to SqlManager.

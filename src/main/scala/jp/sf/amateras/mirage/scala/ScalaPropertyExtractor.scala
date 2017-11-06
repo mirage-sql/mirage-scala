@@ -1,10 +1,10 @@
 package jp.sf.amateras.mirage.scala
 
-import jp.sf.amateras.mirage.bean.DefaultPropertyExtractor
-import jp.sf.amateras.mirage.bean.PropertyWrapper
-import jp.sf.amateras.mirage.bean.PropertyExtractor.PropertyInfo
+import com.miragesql.miragesql.bean.DefaultPropertyExtractor
+import com.miragesql.miragesql.bean.PropertyWrapper
+import com.miragesql.miragesql.bean.PropertyExtractor.PropertyInfo
 import jp.sf.amateras.mirage.scala.Utilities._
-import jp.sf.amateras.mirage.bean.PropertyWrapperImpl
+import com.miragesql.miragesql.bean.PropertyWrapperImpl
 import java.lang.reflect.Modifier
 import java.lang.reflect.Field
 

@@ -1,11 +1,11 @@
 package jp.sf.amateras.mirage.scala
 
-import jp.sf.amateras.mirage.DefaultEntityOperator
-import jp.sf.amateras.mirage.EntityOperator.PrimaryKeyInfo
-import jp.sf.amateras.mirage.bean.PropertyDesc
-import jp.sf.amateras.mirage.annotation.PrimaryKey
-import jp.sf.amateras.mirage.util.MirageUtil
-import jp.sf.amateras.mirage.naming.NameConverter
+import com.miragesql.miragesql.DefaultEntityOperator
+import com.miragesql.miragesql.EntityOperator.PrimaryKeyInfo
+import com.miragesql.miragesql.bean.PropertyDesc
+import com.miragesql.miragesql.annotation.PrimaryKey
+import com.miragesql.miragesql.util.MirageUtil
+import com.miragesql.miragesql.naming.NameConverter
 
 class ScalaEntityOperator extends DefaultEntityOperator {
 

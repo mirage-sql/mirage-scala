@@ -1,14 +1,14 @@
 package jp.sf.amateras.mirage.scala
 
-import jp.sf.amateras.mirage.bean.BeanDescFactory
+import com.miragesql.miragesql.bean.BeanDescFactory
 
 import collection.JavaConverters._
-import jp.sf.amateras.mirage.{IterationCallback, SqlExecutor, SqlManagerImpl}
+import com.miragesql.miragesql.{IterationCallback, SqlExecutor, SqlManagerImpl}
 
 /**
  * SqlManager wrapper for Scala.
  */
-class SqlManager private (sqlManager: jp.sf.amateras.mirage.SqlManagerImpl) {
+class SqlManager private (sqlManager: com.miragesql.miragesql.SqlManagerImpl) {
 
   private lazy val sqlExecutor: SqlExecutor = Utilities.getField(sqlManager, "sqlExecutor")
   val beanDescFactory = new BeanDescFactory()

@@ -1,8 +1,8 @@
 package jp.sf.amateras.mirage.scala
 import org.specs2.mutable._
-import jp.sf.amateras.mirage.bean.BeanDescFactory
-import jp.sf.amateras.mirage.annotation.PrimaryKey.GenerationType
-import jp.sf.amateras.mirage.naming.DefaultNameConverter
+import com.miragesql.miragesql.bean.BeanDescFactory
+import com.miragesql.miragesql.annotation.PrimaryKey.GenerationType
+import com.miragesql.miragesql.naming.DefaultNameConverter
 
 class ScalaEntityOperatorTest extends Specification {
 

@@ -1,8 +1,8 @@
 package jp.sf.amateras.mirage.scala
 
 import org.specs2.mutable._
-import jp.sf.amateras.mirage.annotation._
-import jp.sf.amateras.mirage.util.IOUtil
+import com.miragesql.miragesql.annotation._
+import com.miragesql.miragesql.util.IOUtil
 
 class SqlManagerTest extends Specification {
   sequential

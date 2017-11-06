@@ -7,7 +7,7 @@ package jp.sf.amateras.mirage.scala
  * @constructor Creates new instance of Session
  * @param session Raw Session of Mirage
  */
-class Session(session: jp.sf.amateras.mirage.session.Session){
+class Session(session: com.miragesql.miragesql.session.Session){
 
   /**
    * Begins the transaction.
@@ -37,7 +37,7 @@ class Session(session: jp.sf.amateras.mirage.session.Session){
    * Returns an instance of SqlManager which is related this Session.
    */
   def sqlManager: SqlManager =
-    SqlManager(session.getSqlManager.asInstanceOf[jp.sf.amateras.mirage.SqlManagerImpl])
+    SqlManager(session.getSqlManager.asInstanceOf[com.miragesql.miragesql.SqlManagerImpl])
 
   /**
    * Releases resources which related the current transaction.
@@ -94,7 +94,7 @@ object Session {
   /**
    * Creates new instance of Session.
    */
-  def get: Session =  new Session(jp.sf.amateras.mirage.session.SessionFactory.getSession)
+  def get: Session =  new Session(com.miragesql.miragesql.session.SessionFactory.getSession)
 
   /**
    * Runs the given function which uses Session with automatic transaction controlling.

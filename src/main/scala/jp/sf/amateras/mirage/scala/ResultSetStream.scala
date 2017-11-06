@@ -1,6 +1,6 @@
 package jp.sf.amateras.mirage.scala
 
-import jp.sf.amateras.mirage.{IterationCallback, SqlExecutor}
+import com.miragesql.miragesql.{IterationCallback, SqlExecutor}
 
 class ResultSetStream(sqlExecutor: SqlExecutor, sql: SqlProvider, param: AnyRef) {
 

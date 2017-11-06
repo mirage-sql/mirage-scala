@@ -1,6 +1,6 @@
 package jp.sf.amateras.mirage.scala
 
-import jp.sf.amateras.mirage.bean.PropertyWrapperImpl
+import com.miragesql.miragesql.bean.PropertyWrapperImpl
 import java.lang.reflect.Field
 
 /**

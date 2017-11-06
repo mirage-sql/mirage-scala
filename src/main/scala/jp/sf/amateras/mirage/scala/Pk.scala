@@ -1,5 +1,6 @@
 package jp.sf.amateras.mirage.scala
-import jp.sf.amateras.mirage.annotation.PrimaryKey
+
+import com.miragesql.miragesql.annotation.PrimaryKey
 
 /**
  * This is the wrapper for the primary key property which is set value by the database side.

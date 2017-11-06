@@ -2,9 +2,9 @@ package jp.sf.amateras.mirage.scala
 
 import java.lang.reflect.{Field, Member}
 
-import jp.sf.amateras.mirage.bean.BeanDescFactory
-import jp.sf.amateras.mirage.parser.SqlParserImpl
-import jp.sf.amateras.mirage.util.MirageUtil
+import com.miragesql.miragesql.bean.BeanDescFactory
+import com.miragesql.miragesql.parser.SqlParserImpl
+import com.miragesql.miragesql.util.MirageUtil
 import org.json4s.scalap.scalasig._
 import scala.collection.JavaConverters._
 
