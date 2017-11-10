@@ -1,25 +1,26 @@
-mirage-scala [![Build Status](https://travis-ci.org/mirage-sql/mirage-scala.svg?branch=master)](https://travis-ci.org/mirage-sql/mirage-scala) [![Join the chat at https://gitter.im/mirage-sql/mirage-sql](https://badges.gitter.im/mirage-sql/mirage-sql.svg)](https://gitter.im/mirage-sql/mirage-sql?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-============
+Mirage-SQL Scala [![Build Status](https://travis-ci.org/mirage-sql/mirage-scala.svg?branch=master)](https://travis-ci.org/mirage-sql/mirage-scala) [![Join the chat at https://gitter.im/mirage-sql/mirage-sql](https://badges.gitter.im/mirage-sql/mirage-sql.svg)](https://gitter.im/mirage-sql/mirage-sql?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+================
 
-The SQL Centric Database Access Library for Scala
+The SQL-Centric Database Access Library for Scala
 
 ## Introduction
 
-Mirage-scala is Scala wrapper for [Mirage SQL](https://github.com/mirage-sql/mirage/).
+**`Mirage-SQL Scala`** is wrapper written in Scala with the **[Mirage SQL](https://github.com/mirage-sql/mirage/)** framework.
 
-It provides the dynamic SQL template language called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL). Directives are embedded as SQL comments, so the 2WaySQL template is also executable as raw SQL. It makes SQL dynamic and testable.
+Among other features, it provides the dynamic SQL template language called [2WaySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL). 
+Template directives are embedded as SQL comments, so the 2WaySQL template is also executable as raw SQL. This makes `SQL` both dynamic and testable.
 
-To use mirage-scala with an sbt based project, add following dependency to your `build.sbt`.
+To use **`Mirage-SQL Scala`** with an SBT based project, add following dependency to your `build.sbt`.
 
 ```scala
 libraryDependencies += "com.miragesql" %% "miragesql-scala" % "2.0.0"
 ```
 
-## 2WaySQL dynamic template
+## 2WaySQL Dynamic Template
 
-This is a simple example to query using mirage-scala:
+This is a simple example to query using **`Mirage-SQL Scala`**:
 
-At first, define the DTO which is mapped to ResultList as case class. It's possible to specify `Option[T]` as property type for null-able properties.
+First, define the DTO which is mapped to ResultList as case class. It's possible to specify `Option[T]` as property type for nullable properties.
 
 ```scala
 // A class which mapped to ResultList
@@ -31,7 +32,7 @@ case class Book(
 )
 ```
 
-Execute SQL using `SqlManager`. mirage-scala provides dynamic SQL template called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL) in `Sql()`.
+Execute the `SQL` using `SqlManager`. mirage-scala provides dynamic SQL template called [2waySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL) in `Sql()`.
 
 ```scala
 import com.miragesql.miragesql.scala._
@@ -58,7 +59,7 @@ Session.withTransaction { session =>
 }
 ```
 
-You can also use the external SQL file using `SqlFile()`:
+You can also use an external SQL file using `SqlFile()`:
 
 ```scala
 val result: List[Book] = sqlManager.getResultList[Book](
@@ -66,13 +67,13 @@ val result: List[Book] = sqlManager.getResultList[Book](
   Map("author"->"Naoki Takezoe"))
 ```
 
-In mirage-scala, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
+With **`Mirage-SQL Scala`**, it's also possible to use `Map[String, _]` as result class / parameter class instead of the case class.
 
 See also the [Mirage SQL Documentation](https://github.com/mirage-sql/mirage/wiki/Introduction) to learn more about it's usage.
 
-## SQL less update
+## SQL-less Updates
 
-mirage-scala also supports SQL less select / update using the entity class.
+**`Mirage-SQL Scala`** also supports SQL-less select / update using an entity class.
 
 If the primary key is set at the server-side, for example, it's auto incremented, You have to specify `Auto` for the primary key property.
 
@@ -104,21 +105,21 @@ Batch updating is also available.
 
 ```scala
 // batch inserting
-sqlManager.insertBatch(book1, book2, book3);
-sqlManager.insertBatch(books: _*);
+sqlManager.insertBatch(book1, book2, book3)
+sqlManager.insertBatch(books: _*)
 
 // batch updating
-sqlManager.updateBatch(book1, book2, book3);
-sqlManager.updateBatch(books: _*);
+sqlManager.updateBatch(book1, book2, book3)
+sqlManager.updateBatch(books: _*)
 
 // batch deleting
-sqlManager.deleteBatch(book1, book2, book3);
-sqlManager.deleteBatch(books: _*);
+sqlManager.deleteBatch(book1, book2, book3)
+sqlManager.deleteBatch(books: _*)
 ```
 
-## ResultSet stream
+## ResultSet Streams
 
-To handle large data, create stream by `stream()` method and process each records by `foreach()` method.
+To handle large data, create streams by `stream()` method and process each records by `foreach()` method.
 
 ```scala
 sqlManager
