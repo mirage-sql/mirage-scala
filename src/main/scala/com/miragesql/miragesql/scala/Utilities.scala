@@ -14,7 +14,7 @@ import scala.collection.JavaConverters._
 object Utilities {
 
   /**
-   * Runs the fiven function with the Closeable.
+   * Runs the given function with the Closeable.
    * The Closeable is closed certainly after the execution of the function.
    */
   def using[A, B <: AutoCloseable] (closeable: B) (f: B => A): A =
@@ -81,7 +81,7 @@ object Utilities {
             case _: Field => findField(c, member.getName).map { f =>
               findArgTypeForField(f, 0)
             }
-            case _: Method => throw new RuntimeException("Method type is not supported in mirage-scala.")
+            case _: Method => throw new RuntimeException("Method type is not supported in miragesql-scala.")
           }
       }
       _type.flatten
