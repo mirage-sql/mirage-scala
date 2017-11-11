@@ -1,22 +1,31 @@
 Mirage-SQL Scala [![Build Status](https://travis-ci.org/mirage-sql/mirage-scala.svg?branch=master)](https://travis-ci.org/mirage-sql/mirage-scala) [![Join the chat at https://gitter.im/mirage-sql/mirage-sql](https://badges.gitter.im/mirage-sql/mirage-sql.svg)](https://gitter.im/mirage-sql/mirage-sql?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ================
 
-The SQL-Centric Database Access Library for Scala
+The SQL-Centric Database Access Library for Scala.
 
 ## Introduction
 
-**`Mirage-SQL Scala`** is wrapper written in Scala with the **[Mirage SQL](https://github.com/mirage-sql/mirage/)** framework.
+**`Mirage-SQL Scala`** is wrapper written in Scala for the **[Mirage SQL](https://github.com/mirage-sql/mirage/)** framework.
 
-Among other features, it provides the dynamic SQL template language called [2WaySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL). 
-Template directives are embedded as SQL comments, so the 2WaySQL template is also executable as raw SQL. This makes `SQL` both dynamic and testable.
+Among other features, it provides a dynamic SQL-Template language called: [2WaySQL](https://github.com/mirage-sql/mirage/wiki/2WaySQL). 
 
-To use **`Mirage-SQL Scala`** with an SBT based project, add following dependency to your `build.sbt`.
+Template directives are embedded as **SQL comments**, so that the 2WaySQL template is also executable as raw a SQL at the same time. This makes `SQL` files both dynamic and simply testable at the same time.
+
+To use **`Mirage-SQL Scala`** with an SBT based project, just add following dependency to your `build.sbt`.
 
 ```scala
 libraryDependencies += "com.miragesql" %% "miragesql-scala" % "2.0.0"
 ```
 
-## 2WaySQL Dynamic Template
+## Links:
+ - A more **detailed documentation** will provided in the central [Wiki](https://github.com/mirage-sql/mirage/wiki).
+ - **User Support** in English is provided in the [Gitter Chatroom](https://gitter.im/mirage-sql/mirage-sql).
+ - If you find any **bugs or issues**, please report them in the [GitHub Issue Tracker](https://github.com/mirage-sql/mirage-scala/issues).
+
+
+## Usage
+
+#### A. 2WaySQL Dynamic Template
 
 This is a simple example to query using **`Mirage-SQL Scala`**:
 
@@ -71,7 +80,9 @@ With **`Mirage-SQL Scala`**, it's also possible to use `Map[String, _]` as resul
 
 See also the [Mirage SQL Documentation](https://github.com/mirage-sql/mirage/wiki/Introduction) to learn more about it's usage.
 
-## SQL-less Updates
+
+
+#### B. SQL-less Updates
 
 **`Mirage-SQL Scala`** also supports SQL-less select / update using an entity class.
 
@@ -117,7 +128,7 @@ sqlManager.deleteBatch(book1, book2, book3)
 sqlManager.deleteBatch(books: _*)
 ```
 
-## ResultSet Streams
+#### C. ResultSet Streams
 
 To handle large data, create streams by `stream()` method and process each records by `foreach()` method.
 

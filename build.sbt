@@ -1,6 +1,6 @@
 name := "miragesql-scala"
 organization := "com.miragesql"
-version := "2.0.0-SNAPSHOT "
+version := "2.0.0-SNAPSHOT"
 scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
